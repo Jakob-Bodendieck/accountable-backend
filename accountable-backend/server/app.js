@@ -21,6 +21,9 @@ app.use("/api", indexRoutes);
 const taskRoutes = require("./routes/task.routes");
 app.use("/api", taskRoutes);
 
+const userRoutes = require("./routes/user.routes");
+app.use("/auth", userRoutes)
+
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 

@@ -18,7 +18,7 @@ const saltRounds = 10;
 
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, image} = req.body;
 
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "" || name === "") {
@@ -127,5 +127,48 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
   // Send back the token payload object containing the user data
   res.status(200).json(req.payload);
 });
+
+//Put - Updates one user
+router.put("/users/:userId", (req, res)=>{
+  const {userId} = req.params;
+  const {name, password, email, image} = req.body;
+
+  User.findByIdAndUpdate(userId, {name, password, email, image}, {new: true})
+  .then(()=>{
+      res.json({message: "User Updated"})
+  })
+  .catch ((error)=>{
+      res.json({message: "Error: User not updated"})
+  })
+})
+
+//Delete - Deletes one specific task -> include navigate to signup page. 
+router.delete("/users/:userId", (req, res)=>{
+  const {userId} = req.params;
+  User.findByIdAndDelete(userId)
+  .then(()=>{
+      res.json({message: "User deleted"})
+  })
+  .catch((error)=>{
+      res.json({message: "User could not be deleted"})
+  })
+})
+
+//Get - Reads all tasks
+
+router.get("/users", (req, res)=>{
+  User.find()
+  .then((allUsers) => res.json (allUsers))
+  .catch((error)=>res.json(error))
+})
+
+//Get - Reads one user
+
+router.get("/users/:userId", (req, res)=>{
+  const {userId} = req.params;
+  User.findById(userId)
+  .then((allUsers) => res.json (allUsers))
+  .catch((error)=>res.json(error))
+})
 
 module.exports = router;
