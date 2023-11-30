@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require('mongoose')
+
 
 // ℹ️ Handles password encryption
 const bcrypt = require("bcrypt");
@@ -119,7 +121,7 @@ router.post("/login", (req, res, next) => {
 });
 
 // GET  /auth/verify  -  Used to verify JWT stored on the client
-router.get("/verify", isAuthenticated, (req, res, next) => {
+router.get("/verify", isAuthenticated, (req, res) => {
   // If JWT token is valid the payload gets decoded by the
   // isAuthenticated middleware and is made available on `req.payload`
   console.log(`req.payload`, req.payload);
@@ -127,6 +129,23 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
   // Send back the token payload object containing the user data
   res.status(200).json(req.payload);
 });
+
+//Get - Reads all users
+
+router.get("/users", (req, res)=>{
+  User.find()
+  .then((allUsers) => res.json (allUsers))
+  .catch((error)=>res.json(error))
+})
+
+//Get - Reads one user
+
+router.get("/users/:userId", (req, res)=>{
+  const {userId} = req.params;
+  User.findById(userId)
+  .then((allUsers) => res.json (allUsers))
+  .catch((error)=>res.json(error))
+})
 
 //Put - Updates one user
 router.put("/users/:userId", (req, res)=>{
@@ -152,23 +171,6 @@ router.delete("/users/:userId", (req, res)=>{
   .catch((error)=>{
       res.json({message: "User could not be deleted"})
   })
-})
-
-//Get - Reads all tasks
-
-router.get("/users", (req, res)=>{
-  User.find()
-  .then((allUsers) => res.json (allUsers))
-  .catch((error)=>res.json(error))
-})
-
-//Get - Reads one user
-
-router.get("/users/:userId", (req, res)=>{
-  const {userId} = req.params;
-  User.findById(userId)
-  .then((allUsers) => res.json (allUsers))
-  .catch((error)=>res.json(error))
 })
 
 module.exports = router;
