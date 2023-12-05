@@ -9,9 +9,9 @@ const Task  = require('../models/Task.model')
 
 //Post - Create a new task
 router.post("/task", (req, res)=>{ //do we need to add /:userId/task instead of just /task? 
-    const {title, description, deadline, attachments} = req.body;
+    const {title, description, deadline, attachments, userId} = req.body;
 
-    Task.create({title, description, deadline, attachments}) //add array of users here when adding friends functionality. 
+    Task.create({title, description, deadline, attachments, userId}) //add array of users here when adding friends functionality. 
     .then((response) => res.json(response))
     .catch((error)=> res.json(error))
 })
@@ -35,9 +35,9 @@ router.get("/tasks/:taskId", (req, res)=>{
 //Put - Updates one specific task
 router.put("/tasks/:taskId", (req, res)=>{
     const {taskId} = req.params;
-    const {title, description, deadline, attachments} = req.body;
+    const {title, description, deadline, attachments, userId} = req.body;
 
-    Task.findByIdAndUpdate(taskId, {title, description, deadline, attachments}, {new: true})
+    Task.findByIdAndUpdate(taskId, {title, description, deadline, attachments, userId}, {new: true})
     .then(()=>{
         res.json({message: "Task Updated!"})
     })
