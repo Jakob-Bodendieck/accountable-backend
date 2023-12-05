@@ -17,6 +17,9 @@ const taskSchema = new Schema(
     },
     attachments: {
         type: String,
+    },
+    userId: {
+      type: String
     }
   },
   {
