@@ -16,16 +16,16 @@ router.post("/task", (req, res)=>{ //do we need to add /:userId/task instead of 
     .catch((error)=> res.json(error))
 })
 
-//Get - Reads all tasks
+//Get - Reads all tasks for one specific user
 
-router.get("/tasks", (req, res)=>{
+router.get("/tasks/:userId", (req, res)=>{
     Task.find()
     .then((allTasks) => res.json (allTasks))
     .catch((error)=>res.json(error))
 })
 
 //Get - Reads one specific task
-router.get("/tasks/:taskId", (req, res)=>{
+router.get("/tasks/:userId/:taskId", (req, res)=>{
     const {taskId} = req.params;
     Task.findById(taskId)
     .then((task)=> res.json(task))
@@ -33,7 +33,7 @@ router.get("/tasks/:taskId", (req, res)=>{
 })
 
 //Put - Updates one specific task
-router.put("/tasks/:taskId", (req, res)=>{
+router.put("/tasks/:userId/:taskId", (req, res)=>{
     const {taskId} = req.params;
     const {title, description, deadline, attachments, userId} = req.body;
 
@@ -47,7 +47,7 @@ router.put("/tasks/:taskId", (req, res)=>{
 })
 
 //Delete - Deletes one specific task
-router.delete("/tasks/:taskId", (req, res)=>{
+router.delete("/tasks/:userId/:taskId", (req, res)=>{
     const {taskId} = req.params;
     Task.findByIdAndDelete(taskId)
     .then(()=>{
