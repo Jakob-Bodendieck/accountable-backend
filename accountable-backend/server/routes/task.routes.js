@@ -8,21 +8,28 @@ const Task  = require('../models/Task.model')
 /*Routes */
 
 //Post - Create a new task
-router.post("/task", (req, res)=>{ //do we need to add /:userId/task instead of just /task? 
-    const {title, description, deadline, attachments, userId} = req.body;
+router.post("/task/:userId", (req, res)=>{ //do we need to add /:userId/task instead of just /task? 
+    const userId = req.params.userId
+    const {title, description, deadline, attachments, user} = req.body;
 
-    Task.create({title, description, deadline, attachments, userId}) //add array of users here when adding friends functionality. 
+    Task.create({title, description, deadline, attachments, user}) //add array of users here when adding friends functionality. 
     .then((response) => res.json(response))
     .catch((error)=> res.json(error))
 })
 
 //Get - Reads all tasks for one specific user
 
-router.get("/tasks/:userId", (req, res)=>{
-    Task.find()
-    .then((allTasks) => res.json (allTasks))
-    .catch((error)=>res.json(error))
-})
+router.get('/tasks/:userId', (req, res, next) => {
+    const userId = req.params.userId;
+  
+    Task.find({ user: userId })
+      .then((tasks) => {
+        res.json(tasks);
+      })
+      .catch((error) => {
+        res.json(error);
+      });
+  });
 
 //Get - Reads one specific task
 router.get("/tasks/:userId/:taskId", (req, res)=>{

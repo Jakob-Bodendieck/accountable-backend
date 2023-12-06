@@ -17,9 +17,8 @@ const taskSchema = new Schema(
     attachments: {
         type: String,
     },
-    userId: {
-      type: Schema.Types.ObjectId, 
-      ref: 'User' 
+    user: {
+      type: String,
     }
   },
   {
